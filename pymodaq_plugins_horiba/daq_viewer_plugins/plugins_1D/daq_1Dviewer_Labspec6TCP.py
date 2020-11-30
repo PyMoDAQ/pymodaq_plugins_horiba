@@ -23,7 +23,7 @@ from pymodaq.daq_utils.daq_utils import ThreadCommand, getLineInfo, gauss1D, lin
 from pymodaq.daq_viewer.utility_classes import comon_parameters
 from pyqtgraph.parametertree import Parameter, ParameterTree
 import pyqtgraph.parametertree.parameterTypes as pTypes
-import pymodaq.daq_utils.custom_parameter_tree as custom_tree
+import pymodaq.daq_utils.parameter.pymodaq_ptypes as pymodaq_ptypes
 from ...hardware.horiba.labspec6 import Labspec6Client
 
 
