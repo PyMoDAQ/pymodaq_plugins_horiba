@@ -44,6 +44,7 @@ setup(
     version=version.get_version(),
     packages=find_packages(),
     package_data={'': ['*.dll']},
+    include_package_data=True,
     entry_points={'pymodaq.plugins': f'{SHORT_PLUGIN_NAME} = {PLUGIN_NAME}'},
     install_requires=[
         'pymodaq>=2.0',
