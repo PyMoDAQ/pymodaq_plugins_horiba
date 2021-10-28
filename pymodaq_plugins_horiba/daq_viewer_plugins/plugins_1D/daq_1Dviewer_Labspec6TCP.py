@@ -13,8 +13,8 @@ data
 
 
 
-from PyQt5.QtCore import QThread
-from PyQt5 import QtWidgets
+from qtpy.QtCore import QThread
+from qtpy import QtWidgets
 from pymodaq.daq_viewer.utility_classes import DAQ_Viewer_base
 import numpy as np
 from easydict import EasyDict as edict
