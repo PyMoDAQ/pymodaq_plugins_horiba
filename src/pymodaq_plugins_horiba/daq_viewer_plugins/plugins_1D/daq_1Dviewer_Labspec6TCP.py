@@ -52,8 +52,8 @@ class DAQ_1DViewer_Labspec6TCP(DAQ_Viewer_base):
                 ]
              },
             {'title': 'Instrument setup', 'name': 'inst_setup', 'type': 'group', 'children': [
-                {'title': 'Grating', 'name': 'grating', 'type': 'list', 'values': []},
-                {'title': 'Laser', 'name': 'laser', 'type': 'list', 'values': []},
+                {'title': 'Grating', 'name': 'grating', 'type': 'list', 'limits': []},
+                {'title': 'Laser', 'name': 'laser', 'type': 'list', 'limits': []},
                 {'title': 'Hole', 'name': 'hole', 'type': 'int', 'value': 70, 'min': 1},
                 {'title': 'Slit', 'name': 'slit', 'type': 'int', 'value': 100, 'min': 1},
                 ],
