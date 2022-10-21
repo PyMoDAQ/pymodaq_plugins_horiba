@@ -2,7 +2,7 @@
 
 [plugin-info]
 SHORT_PLUGIN_NAME = 'horiba'  #for instance daqmx
-package-url = 'https://github.com/CEMES-CNRS/pymodaq_plugins_horiba' #to modify
+package-url = 'https://github.com/PyMoDAQ/pymodaq_plugins_horiba' #to modify
 description = 'Set of PyMoDAQ plugins for Horiba Instruments (Lapspec6TCP to communicate with labspec softaware using the AFM TCP/IP protocol)'
 
 author = 'Sébastien Weber'

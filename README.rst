@@ -9,8 +9,8 @@ pymodaq_plugins_horiba (Horiba Spectrometers)
    :target: https://pymodaq.readthedocs.io/en/stable/?badge=latest
    :alt: Documentation Status
 
-.. image:: https://github.com/CEMES-CNRS/pymodaq_plugins_horiba/workflows/Upload%20Python%20Package/badge.svg
-    :target: https://github.com/CEMES-CNRS/pymodaq_plugins_horiba
+.. image:: https://github.com/PyMoDAQ/pymodaq_plugins_horiba/workflows/Upload%20Python%20Package/badge.svg
+    :target: https://github.com/PyMoDAQ/pymodaq_plugins_horiba
 
 PyMoDAQ plugin for Horiba Instruments (Lapspec6TCP to communicate with labspec
 software using the AFM TCP/IP protocol
