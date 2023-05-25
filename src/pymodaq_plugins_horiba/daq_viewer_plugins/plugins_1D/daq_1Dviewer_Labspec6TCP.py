@@ -10,23 +10,11 @@ This plugin use a wrapper in hardware/horiba/labspec6.py => Labspec6Client that 
 data
 
 """
-
-
-
-from qtpy.QtCore import QThread
-from qtpy import QtWidgets
-from pymodaq.control_modules.viewer_utility_classes import DAQ_Viewer_base
-import numpy as np
-from easydict import EasyDict as edict
-from collections import OrderedDict
-from pymodaq.daq_utils.daq_utils import ThreadCommand, getLineInfo, gauss1D, linspace_step, DataFromPlugins, Axis
+from pymodaq.control_modules.viewer_utility_classes import DAQ_Viewer_base, main
+from pymodaq.utils.daq_utils import ThreadCommand
+from pymodaq.utils.data import DataFromPlugins, Axis
 from pymodaq.control_modules.viewer_utility_classes import comon_parameters
-from pyqtgraph.parametertree import Parameter, ParameterTree
-import pyqtgraph.parametertree.parameterTypes as pTypes
-import pymodaq.daq_utils.parameter.pymodaq_ptypes as pymodaq_ptypes
-from ...hardware.horiba.labspec6 import Labspec6Client
-
-
+from pymodaq_plugins_horiba.hardware.horiba.labspec6 import Labspec6Client
 
 
 class DAQ_1DViewer_Labspec6TCP(DAQ_Viewer_base):
@@ -65,9 +53,8 @@ class DAQ_1DViewer_Labspec6TCP(DAQ_Viewer_base):
 
     hardware_averaging = False
 
-    def __init__(self, parent=None, params_state=None): #init_params is a list of tuple where each tuple contains info on a 1D channel (Ntps,amplitude, width, position and noise)
-        self.controller = None
-        super().__init__(parent, params_state)
+    def ini_attributes(self):
+        self.controller: Labspec6Client = None
         self.x_axis = dict(label='photon wavelength', unit='nm')
         self.sock = None
         self.controller_ready = False
@@ -160,41 +147,28 @@ class DAQ_1DViewer_Labspec6TCP(DAQ_Viewer_base):
             --------
             set_Mock_data, daq_utils.ThreadCommand
         """
-        self.status.update(edict(initialized=False,info="",x_axis=None,y_axis=None,controller=None))
-        try:
+        self.ini_detector_init(old_controller=controller,
+                               new_controller=Labspec6Client())
 
-            if self.settings.child(('controller_status')).value()=="Slave":
-                if controller is None: 
-                    raise Exception('no controller has been defined externally while this detector is a slave one')
-                else:
-                    self.controller = controller
-            else:
-                self.controller = Labspec6Client()
-                ret, data, extra = self.controller.connect(self.settings.child('connection', 'ip_address').value(),
-                                                           self.settings.child('connection', 'port').value())
-                if ret != 'OK':
-                    raise IOError('Wrong return from Server')
-                self.settings.child('connection',  'controllerid').setValue(data)
+        if self.settings.child('controller_status').value() == "Master":
+            ret, data, extra = self.controller.connect(self.settings.child('connection', 'ip_address').value(),
+                                                       self.settings.child('connection', 'port').value())
+            if ret != 'OK':
+                raise IOError('Wrong return from Server')
+            self.settings.child('connection',  'controllerid').setValue(data)
 
-            self.controller.timeout_mult = self.settings.child('connection', 'timeout').value()
-            self.init_params()
+        self.controller.timeout_mult = self.settings.child('connection', 'timeout').value()
+        self.init_params()
 
-            # initialize viewers with the future type of data
-            self.x_axis = self.controller.get_x_axis()
+        # initialize viewers with the future type of data
+        self.x_axis = self.controller.get_x_axis()
 
-            self.data_grabed_signal_temp.emit([DataFromPlugins(name='LabSpec6', data=[self.x_axis*0], dim='Data1D',
-                x_axis=Axis(data=self.x_axis, units='nm', label='Wavelength'), labels=['Spectrum']),])
+        self.data_grabed_signal_temp.emit([DataFromPlugins(name='LabSpec6', data=[self.x_axis*0], dim='Data1D',
+            x_axis=Axis(data=self.x_axis, units='nm', label='Wavelength'), labels=['Spectrum']),])
 
-            self.status.initialized = True
-            self.status.controller = self.controller
-            self.status.x_axis = self.x_axis
-            return self.status
-
-        except Exception as e:
-            self.emit_status(ThreadCommand('Update_Status', [getLineInfo() + str(e), 'log']))
-            self.status.info = getLineInfo() + str(e)
-            self.status.initialized = False
-            return self.status
+        info = "Whatever info you want to log"
+        initialized = True
+        return info, initialized
 
     def close(self):
         """
@@ -267,3 +241,7 @@ class DAQ_1DViewer_Labspec6TCP(DAQ_Viewer_base):
         """
         
         return ""
+
+
+if __name__ == '__main__':
+    main(__file__, init=True)
