@@ -21,7 +21,13 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install setuptools wheel twine toml
+        pip install setuptools wheel twine toml "pymodaq>=4.1.0" pyqt5
+
+    - name: create local pymodaq folder and setting permissions
+      run: |
+        sudo mkdir /etc/.pymodaq
+        sudo chmod uo+rw /etc/.pymodaq
+        
     - name: Build and publish
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
