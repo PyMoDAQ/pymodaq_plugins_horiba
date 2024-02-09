@@ -1,6 +1,6 @@
 import importlib
 from pathlib import Path
-from ... import set_logger
+from .. import set_logger
 logger = set_logger('move_plugins', add_to_console=False)
 
 for path in Path(__file__).parent.iterdir():
