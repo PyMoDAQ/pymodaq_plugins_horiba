@@ -1,5 +1,8 @@
+from pymodaq_utils.utils import get_version, PackageNotFoundError
 from pathlib import Path
 from pymodaq.utils.daq_utils import set_logger
 
-with open(str(Path(__file__).parent.joinpath('resources/VERSION')), 'r') as fvers:
-    __version__ = fvers.read().strip()
+try:
+    __version__ = get_version(__package__)
+except PackageNotFoundError:
+    __version__ = '0.0.0dev'
